@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Descubre tu Tribu de Israel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ════════════════════════════════
+       CANVAS DE PARTÍCULAS (fondo global)
+  ════════════════════════════════ -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- ════════════════════════════════
+       PORTADA PRINCIPAL
+  ════════════════════════════════ -->
+  <section id="homeScreen" class="screen active">
+
+    <!-- Fondo épico con capas parallax -->
+    <div class="hero-bg">
+      <div class="hero-layer layer-sky"></div>
+      <div class="hero-layer layer-mountains"></div>
+      <div class="hero-layer layer-tribes"></div>
+      <div class="hero-layer layer-fog"></div>
+      <div class="hero-overlay"></div>
+    </div>
+
+    <!-- Letras hebreas decorativas flotantes -->
+    <div class="hebrew-letters" aria-hidden="true">
+      <span class="heb-letter" style="top:8%;left:5%;font-size:4rem;opacity:.08;">א</span>
+      <span class="heb-letter" style="top:15%;right:8%;font-size:3rem;opacity:.07;">ב</span>
+      <span class="heb-letter" style="top:70%;left:3%;font-size:5rem;opacity:.06;">ג</span>
+      <span class="heb-letter" style="top:80%;right:5%;font-size:3.5rem;opacity:.08;">ד</span>
+      <span class="heb-letter" style="top:40%;left:2%;font-size:2.5rem;opacity:.05;">ה</span>
+      <span class="heb-letter" style="top:55%;right:3%;font-size:4rem;opacity:.06;">ו</span>
+      <span class="heb-letter" style="top:25%;left:92%;font-size:3rem;opacity:.05;">ז</span>
+      <span class="heb-letter" style="top:90%;left:50%;font-size:2rem;opacity:.05;">ח</span>
+    </div>
+
+    <!-- Contenido central -->
+    <div class="hero-content">
+      <div class="eyebrow-label animate-fade-up delay-1">✦ Legado Sagrado ✦</div>
+
+      <h1 class="hero-title animate-fade-up delay-2">
+        <span class="title-line-1">Descubre tu</span>
+        <span class="title-line-2">Tribu de Israel</span>
+      </h1>
+
+      <p class="hero-subtitle animate-fade-up delay-3">
+        Conoce qué tribu refleja simbólicamente tu fecha de nacimiento<br />
+        y descubre su historia, bendiciones y características bíblicas.
+      </p>
+
+      <!-- Formulario de fecha -->
+      <div class="form-card animate-fade-up delay-4">
+        <div class="form-inner">
+          <label for="birthDate" class="form-label">Tu fecha de nacimiento</label>
+          <div class="date-input-wrapper">
+            <input type="date" id="birthDate" class="date-input" max="2025-12-31" />
+            <div class="input-glow"></div>
+          </div>
+          <button id="discoverBtn" class="discover-btn" onclick="discoverTribe()">
+            <span class="btn-text">Descubrir mi Tribu</span>
+            <span class="btn-icon">✦</span>
+            <div class="btn-shimmer"></div>
+          </button>
+          <p class="form-note">* La asignación es simbólica, inspirada en la tradición bíblica</p>
+        </div>
+      </div>
+
+      <!-- Contador -->
+      <div class="discovery-counter animate-fade-up delay-5">
+        <span class="counter-num" id="counterNum">12,847</span>
+        <span class="counter-label">descubrimientos realizados</span>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="scroll-hint animate-fade-up delay-5">
+      <span>Las 12 Tribus</span>
+      <div class="scroll-line"></div>
+    </div>
+
+    <!-- Preview de las 12 tribus abajo -->
+    <div class="tribes-preview">
+      <div class="tribes-scroll-container" id="tribesPreview">
+        <!-- generado por JS -->
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════
+       PANTALLA DE CARGA / TRANSICIÓN
+  ════════════════════════════════ -->
+  <section id="loadingScreen" class="screen">
+    <div class="scroll-transition">
+      <div class="scroll-outer">
+        <div class="scroll-rod scroll-rod-top"></div>
+        <div class="scroll-paper">
+          <div class="scroll-content">
+            <div class="scroll-hebrew">מגלה</div>
+            <div class="scroll-loading-text">Consultando las escrituras…</div>
+            <div class="scroll-dots">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>
+        <div class="scroll-rod scroll-rod-bottom"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════
+       PANTALLA DE RESULTADO
+  ════════════════════════════════ -->
+  <section id="resultScreen" class="screen">
+
+    <!-- Fondo dinámico (se pone con JS) -->
+    <div id="resultBg" class="result-bg">
+      <div id="resultBgLayer" class="result-bg-layer"></div>
+      <div class="result-bg-overlay"></div>
+    </div>
+
+    <!-- Partículas específicas de tribu -->
+    <canvas id="tribeCanvas"></canvas>
+
+    <!-- Contenido del resultado -->
+    <div class="result-wrapper">
+
+      <!-- Header -->
+      <header class="result-header">
+        <button class="back-btn" onclick="goHome()">
+          ← Volver al inicio
+        </button>
+        <div class="result-share-group">
+          <button class="share-btn" onclick="shareResult()">↗ Compartir</button>
+          <button class="download-btn" onclick="downloadResult()">⬇ Guardar imagen</button>
+        </div>
+      </header>
+
+      <!-- Tarjeta principal de resultado -->
+      <div class="tribe-card" id="tribeCard">
+
+        <!-- Anuncio -->
+        <div class="tribe-announce">Tu tribu es</div>
+
+        <!-- Símbolo -->
+        <div class="tribe-symbol-wrap">
+          <div class="tribe-symbol-bg"></div>
+          <div class="tribe-symbol" id="tribeSymbol"></div>
+        </div>
+
+        <!-- Nombre -->
+        <h1 class="tribe-name" id="tribeName"></h1>
+
+        <!-- Lema hebreo -->
+        <div class="tribe-hebrew" id="tribeHebrew"></div>
+
+        <!-- Descripción principal -->
+        <p class="tribe-description" id="tribeDescription"></p>
+
+        <!-- Características -->
+        <div class="tribe-section">
+          <h2 class="section-title">✦ Características</h2>
+          <ul class="tribe-traits" id="tribeTraits"></ul>
+        </div>
+
+        <!-- Bendición bíblica -->
+        <div class="tribe-section blessing-section">
+          <h2 class="section-title">✦ Bendición Bíblica</h2>
+          <div class="blessing-cards" id="blessingCards"></div>
+        </div>
+
+        <!-- Referencias -->
+        <div class="tribe-section">
+          <h2 class="section-title">✦ Referencias Sagradas</h2>
+          <div class="references-grid" id="referencesGrid"></div>
+        </div>
+
+        <!-- Nota simbólica -->
+        <div class="symbolic-note">
+          <span class="note-icon">📜</span>
+          <p>Asignación simbólica inspirada en las características tradicionales de las tribus de Israel. Esta experiencia tiene un propósito cultural y espiritual educativo.</p>
+        </div>
+
+        <!-- Otras tribus -->
+        <div class="tribe-section other-tribes-section">
+          <h2 class="section-title">✦ Las 12 Tribus</h2>
+          <div class="other-tribes-grid" id="otherTribesGrid"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════
+       NOTIFICACIÓN TOAST
+  ════════════════════════════════ -->
+  <div id="toast" class="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
